@@ -4,7 +4,10 @@
   "description": "Job Queue Application",
   "main": "server.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node server.js",
+    "build": "webpack -p --progress --mode production",
+    "dev": "webpack --progress --color --watch --mode development & nodemon --watch components"
   },
   "author": "Thomas P. Matecki",
   "license": "ISC",
@@ -14,17 +17,29 @@
   },
   "dependencies": {
     "babel-cli": "6.x.x",
-    "babel-core": "6.x.x",
-    "babel-loader": "7.x.x",
     "babel-preset-env": "1.x.x",
-    "babel-preset-react": "6.x.x",
+    "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.26.0",
     "hapi": "^17.2.3",
     "hapi-pino": "^4.0.3",
+    "hapi-plugin-websocket": "^2.0.4",
     "hapi-react-views": "^10.0.0",
     "inert": "^5.1.0",
+    "jshint": "^2.9.5",
+    "socket.io-client": "^2.1.0",
+    "vision": "^5.3.2"
+  },
+  "devDependencies": {
     "material-ui": "^0.20.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "vision": "^5.3.2"
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "rxjs": "^5.5.8",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "nodemon": "^1.17.2",
+    "webpack": "^4.3.0",
+    "webpack-cli": "^2.0.13"
   }
 }
