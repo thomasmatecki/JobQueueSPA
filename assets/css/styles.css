@@ -1,0 +1,42 @@
+.split-container {
+    display: flex;
+    flexDirection: row;
+}
+
+.container {
+    margin: 50px
+}
+
+.controllerContainer {
+    display: flex;
+    flexDirection: column;
+    alignContent: center;
+    float: right;
+}
+
+.split-container {
+    display: flex;
+    flexDirection: row;
+}
+
+.split-child {
+    padding: 5px;
+}
+
+.title-area {
+    display: flex;
+    justifyContent: space-between;
+    alignItems: baseline;
+}
+
+.timer {
+    padding: 16px;
+}
+
+.action {
+    float: right;
+}
+
+.job-card {
+    margin: 10px;
+}

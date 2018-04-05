@@ -5,16 +5,17 @@ import ReactDOM from 'react-dom';
 class App extends React.Component {
   render() {
     return (
-      <html>
+        <html>
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          <link rel="stylesheet" href="/css/styles.css"/>
         </head>
-          <body >
-            <div id="app"></div>
-            <script src="js/bundle.js"></script>
-          </body>
-      </html>);
-    }
+        <body>
+        <div id="app"/>
+        <script src="/js/bundle.js"/>
+        </body>
+        </html>);
   }
-  
+}
+
 export default App;

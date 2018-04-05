@@ -1,6 +1,6 @@
 // Webpack config file
 module.exports = {
-    entry: './components/App.jsx',
+    entry: './src/components/App.js',
     output: {
       path: __dirname + '/assets/js',
       filename: 'bundle.js'
@@ -8,7 +8,7 @@ module.exports = {
     module: {
       rules: [
         {
-          test: /\.jsx$/,
+          test: /\.js$/,
           loader: 'babel-loader'
         }
       ]
