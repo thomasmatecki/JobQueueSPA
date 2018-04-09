@@ -12,6 +12,10 @@ import SnackBar from 'material-ui/Snackbar';
 import PropTypes from 'prop-types';
 import {JobCancel} from "./JobCancel";
 
+/**
+ * Snackbar messaging indicating a job has been
+ * submitted.
+ */
 export class JobSnack extends Component {
 
   static SUBMISSION_MESSAGE = (id) => `Job ${id} Submitted!`;

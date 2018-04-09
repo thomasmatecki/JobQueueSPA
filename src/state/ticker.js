@@ -12,7 +12,7 @@ import {scan} from 'rxjs/operators';
 
 export const Ticker = (startTime) => {
 
-  const updateSource = Observable.timer(0, 500).timeInterval();
+  const updateSource = Observable.timer(0, 200).timeInterval();
 
   const ticker = {
     observable: updateSource,

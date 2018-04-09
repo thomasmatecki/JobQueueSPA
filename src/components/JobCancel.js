@@ -14,7 +14,8 @@ import {cancelJob} from './REST';
 
 
 /**
- * Job Cancellation dialog.
+ * Job Cancellation dialog. Used in snackbar
+ * messaging and cancell button.
  */
 export class JobCancel extends Component {
 

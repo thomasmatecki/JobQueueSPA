@@ -18,11 +18,11 @@ import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import appReducer, {initialState} from '../state';
 import {getAllJobs} from './REST';
-import {TOGGLE_QUEUE} from '../constants';
+import PropTypes from 'prop-types';
 import {LockToggleContainer} from "./LockToggle";
 
 /**
- *
+ * Application scaffold.
  *
  */
 const App = ({websocket}) => (
@@ -54,15 +54,23 @@ const App = ({websocket}) => (
     </div>
 );
 
+App.propTypes = {
+  websocket: PropTypes.object.isRequired
+};
+
+
 /**
- * Instantiate a websocket connection and retrieve
+ * Instantiates a websocket connection and retrieve
  * initial state from the server. The websocket only
  * dispatches events to the store and thus is not
- * injected into the state for use throughout.
+ * injected into the state tree.
+ *
+ *
  */
 class AppContainer extends Component {
 
-  ws = new WebSocket('ws://localhost:3000/action');
+
+  ws = new WebSocket(`ws://${window.location.host}/action`);
   store;
 
   constructor(props) {
@@ -91,6 +99,12 @@ class AppContainer extends Component {
     this.ws.onopen = this.onWSOpen;
   }
 
+  /**
+   * Display loading graphic until websocket connection
+   * is established. Inject material-ui theming and
+   * redux state into the application.
+   * @returns {*}
+   */
   render() {
     return (
         <MuiThemeProvider>
@@ -99,9 +113,12 @@ class AppContainer extends Component {
                 <Provider store={this.store}>
                   <App websocket={this.ws}/>
                 </Provider> :
-                <CircularProgress
-                    size={80}
-                    thickness={5}/>}
+                <div className="loader-container">
+                  <CircularProgress
+                      style={{top: '50%'}}
+                      size={200}
+                      thickness={5}/>
+                </div>}
           </div>
         </MuiThemeProvider>);
   }

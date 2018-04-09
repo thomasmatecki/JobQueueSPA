@@ -11,21 +11,27 @@ import {CardTitle} from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 
-
+/**
+ * Continually updating timer on all job cards.
+ *
+ * The `ticker` prop should be an RXJS observable
+ * that is used to update all CardTickers at some
+ * sub-second interval.
+ */
 export class CardTicker extends Component {
 
   static propTypes = {
     submissionTime: PropTypes.number.isRequired,
     ticker: PropTypes.object.isRequired,
-    statusDescription: PropTypes.string.isRequired
+    statusDescription: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
+
     this.state = {
       elapsed: this.props.ticker.serverTime
     };
-
   }
 
   componentDidMount() {

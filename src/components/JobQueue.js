@@ -22,7 +22,14 @@ const style = {
     padding: 20,
   }
 };
-
+/**
+ * List of Cards representing jobs that have
+ * been submitted for processing.
+ *
+ * @param queue
+ * @returns {*}
+ * @constructor
+ */
 const JobQueue = ({queue}) => (
     <Paper
         style={{

@@ -48,6 +48,7 @@ export const JobCard = ({job, idx}) => {
 
           <CardTickerContainer
               submissionTime={job.submissionTime}
+              startTime={(idx === 0) ? 0 : undefined}
               statusDescription="In Queue"/>
         </div>
         <div

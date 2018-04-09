@@ -13,7 +13,15 @@ import {connect} from "react-redux";
 import Toggle from 'material-ui/Toggle';
 import SnackBar from 'material-ui/Snackbar';
 
-
+/**
+ * When toggled, dispatch redux action to all clients
+ * via websocket (see `ActionBroker` in actions.js).
+ *
+ * @param websocket
+ * @param locked
+ * @returns {*}
+ * @constructor
+ */
 const LockToggle = ({websocket, locked}) =>
     (<div>
       <Toggle

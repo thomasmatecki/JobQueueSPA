@@ -13,10 +13,19 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {createJob} from "./REST";
 
+
+/**
+ * Job Name input form.  Validates job name is present
+ * and invokes RESTful interface to call backend.
+ *
+ * After successful POST, calls `afterCreated` to
+ * perform any UI updates.
+ */
 class JobForm extends Component {
 
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired,
+    afterCreated: PropTypes.func.isRequired
   };
 
   state = {
@@ -40,7 +49,9 @@ class JobForm extends Component {
                   errorText={this.state.errorText}
                   floatingLabelText="Job Name"
                   value={this.state.jobName}
-                  onChange={(event, value) => this.setState({errorText: "", jobName: value})}
+                  onChange={(event, value) => {
+                    this.setState({errorText: "", jobName: value})
+                  }}
               />
             </div>
             <RaisedButton

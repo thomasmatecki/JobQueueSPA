@@ -11,6 +11,10 @@ import Paper from 'material-ui/Paper';
 import {JobSnack} from "./JobSnack";
 import {JobFormContainer} from "./JobForm";
 
+/**
+ * Container for Job Submission form. Injects
+ * callback displaying snackbar message.
+ */
 export class QueueController extends Component {
 
   state = {
