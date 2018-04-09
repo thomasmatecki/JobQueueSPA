@@ -1,9 +1,16 @@
+/*
+ * Copyright (c) 2018 Thomas Matecki - All Rights Reserved
+ *
+ * This code is part of web application build for demostrative 
+ * purposes only. You may use, distribute and modify this code
+ * as you wish.
+ */
+
 "use strict";
 
 const Hapi = require("hapi");
 const Vision = require('vision');
 const Inert = require('inert');
-const HapiReactViews = require('hapi-react-views');
 const HAPIWebSocket = require('hapi-plugin-websocket');
 const Jobs = require('./data/jobs.js')();
 const ActionBroker = require('./actions');
@@ -15,7 +22,7 @@ require('babel-core/register')({
 
 const server = Hapi.Server({
   port: 3000,
-  host: 'localhost',
+  host: '0.0.0.0',
 });
 
 
@@ -27,14 +34,6 @@ module.exports = {
     await server.register(Inert);
     await server.register(HAPIWebSocket);
 
-    server.views({
-      engines: {
-        jsx: HapiReactViews
-      },
-      relativeTo: __dirname,
-      path: 'views'
-    });
-
     server.route({
       method: 'GET',
       path: '/{param*}',
@@ -43,6 +42,14 @@ module.exports = {
           path: './assets',
           index: false
         }
+      }
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/',
+      handler: {
+        file: './assets/index.html'
       }
     });
 
@@ -67,14 +74,6 @@ module.exports = {
       method: ['GET', 'POST', 'DELETE'],
       path: '/jobs',
       handler: (request, h) => Jobs[request.method](request, h)
-    });
-
-    server.route({
-      method: 'GET',
-      path: '/',
-      handler: (request, h) => {
-        return h.view('Main');
-      }
     });
 
     await server.start().then(() => {

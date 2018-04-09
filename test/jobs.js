@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2018 Thomas Matecki - All Rights Reserved
+ *
+ * This code is part of web application build for demostrative
+ * purposes only. You may use, distribute and modify this code
+ * as you wish.
+ */
+
 const {Server, WebSocket} = require('mock-websocket');
 const ActionBroker = require('../src/actions');
 const Jobs = require('../src/data/jobs.js')(500, 2000);
