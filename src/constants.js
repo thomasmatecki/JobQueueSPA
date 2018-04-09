@@ -3,6 +3,7 @@
  */
 
 module.exports = {
+  //
   SUBMIT_JOB: '@@job/submit-job',
   CANCEL_JOB: '@@job/cancel-job',
   COMPLETE_JOB: '@@job/complete-job',

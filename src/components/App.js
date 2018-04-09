@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
-import {QueueControllerContainer} from './QueueController.js';
+import {QueueController} from './QueueController.js';
 import {JobQueueContainer} from './JobQueue.js';
-import Toggle from 'material-ui/Toggle';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import CircularProgress from 'material-ui/CircularProgress';
 import {Provider} from 'react-redux';
@@ -12,6 +11,7 @@ import {createStore} from 'redux';
 import appReducer, {initialState} from '../state';
 import {getAllJobs} from './REST';
 import {TOGGLE_QUEUE} from '../constants';
+import {LockToggleContainer} from "./LockToggle";
 
 /**
  *
@@ -25,21 +25,15 @@ const App = ({websocket}) => (
       <div className="container">
         <Toolbar style={{margin: '3px'}}>
           <ToolbarGroup>
-            <Toggle
-                label="Pause"
-                onToggle={(event, isInputChecked) => {
-                  websocket.send(JSON.stringify({
-                    type: TOGGLE_QUEUE,
-                    status: isInputChecked
-                  }));
-                }}/>
+            <LockToggleContainer
+                websocket={websocket}/>
             <ToolbarSeparator/>
           </ToolbarGroup>
         </Toolbar>
         <div className="split-container">
           <div className="split-child">
             <div className="controller-container">
-              <QueueControllerContainer/>
+              <QueueController/>
             </div>
           </div>
           <div style={{width: '100%'}}>

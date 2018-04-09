@@ -4,6 +4,7 @@
  * @returns {Promise<Response>}
  */
 export function cancelJob(id) {
+  
   return fetch('/jobs', {
     method: 'DELETE',
     headers: {

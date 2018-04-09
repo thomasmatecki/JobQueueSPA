@@ -1,7 +1,7 @@
 const Boom = require('boom');
 
 const {SUBMIT_JOB, CANCEL_JOB, COMPLETE_JOB} = require('../constants');
-const {ActionBroker} = require('../actions');
+const ActionBroker = require('../actions');
 /**
  *
  * @type {number}
@@ -20,31 +20,36 @@ let processIdx = -1;
 const jobs = new Map();
 
 /**
- *
+ * Begin processing the top entry in the
+ * work queue.
  * @param job
  */
 function enqueue(job) {
   processIdx = job.id;
-  //console.log(`Begin processing job ${processIdx}`);
   setTimeout(dequeueJob, job.processingTime);
 }
 
 /**
- *
+ * Find the next item in the work queue and
+ * being processing
  */
 function dequeueJob() {
 
   //Set the last the `complete` flag to true
   jobs.get(processIdx).complete = true;
 
-  //console.log(`Done processing job ${processIdx}`);
-
-  ActionBroker.emit({
+  ActionBroker.broadcast({
     type: COMPLETE_JOB,
     id: processIdx
   });
 
-  const next = jobs.get(processIdx + 1);
+  let next = null;
+
+  // increment processIdx until entry is found or keyIdx is reached.
+  while (!next && processIdx < keyIdx) {
+    processIdx++;
+    next = jobs.get(processIdx);
+  }
 
   if (next) {
     enqueue(next);
@@ -53,8 +58,16 @@ function dequeueJob() {
   }
 }
 
-module.exports = {
+/**
+ * RESTful interface to manipulated jobs.
+ * @param minProcTime
+ * @param maxProcTime
+ * @returns {{post: post, get: get, delete: delete}}
+ */
+module.exports = (minProcTime = 500, maxProcTime = 15000) => ({
   /**
+   * Add a job. If not job is currently processing,
+   * being processing of this job.
    *
    * @param request
    * @param h
@@ -72,14 +85,14 @@ module.exports = {
 
     job.id = keyIdx;
     job.submissionTime = (new Date()).getTime();
-    job.processingTime = Math.floor(Math.random() * 14500) + 500;
+    job.processingTime = Math.floor(Math.random() * (maxProcTime - minProcTime)) + minProcTime;
 
     //Status flag 
     job.complete = false;
 
     jobs.set(keyIdx, job);
 
-    ActionBroker.emit({
+    ActionBroker.broadcast({
       type: SUBMIT_JOB,
       job: job
     });
@@ -89,46 +102,56 @@ module.exports = {
     }
 
     return {
-      statusCode: 201,
+      message: "created",
       id: job.id
     };
-
   },
 
   /**
+   * Return all jobs not completed.
    *
    * @param request
    * @param h
    * @returns {{serverTime: number, jobs: some[]}}
    */
   get: function (request, h) {
+
     return {
       serverTime: Date.now(),
       locked: false,
       jobs: Array.from(jobs.values()).filter(job => job.complete === false)
     };
-  },
+  }
+  ,
 
   /**
+   * Delete a job, else error.
    *
    * @param request
    * @param h
    * @returns {string}
    */
-  delete: function (request, h) {
-    const id = request.payload;
+  delete:
+      function (request, h) {
+        const id = request.payload;
 
-    if (processIdx === id) {
-      return Boom.conflict("This job is already processing");
-    }
+        if (processIdx === id) {
+          return Boom.conflict("This job is already processing");
+        }
 
-    jobs.delete(id);
+        // HTTP 404 if job doesn't (or no longer) exist(s).
+        if (!jobs.delete(id)) {
+          return Boom.notFound(`job ${id} not found`);
+        }
 
-    ActionBroker.emit({
-      type: CANCEL_JOB,
-      id: id
-    });
+        ActionBroker.broadcast({
+          type: CANCEL_JOB,
+          id: id
+        });
 
-    return "Ok"
-  }
-};
+        return {
+          message: "deleted",
+          id: id
+        };
+      }
+});

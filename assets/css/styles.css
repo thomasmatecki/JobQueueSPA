@@ -40,3 +40,22 @@
 .job-card {
     margin: 10px;
 }
+
+.input-box {
+    height: 80px;
+}
+
+.submit-button {
+    float: right
+}
+
+.paper-container {
+    padding: 20px;
+    display: inline-block;
+}
+
+.job-card-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

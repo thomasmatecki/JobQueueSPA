@@ -1,45 +1,49 @@
+
+
 /**
- *
  * HAPIWebSockets maintains an array of `peers`,
  * but on disconnect, the disconnecting peer is
  * included with ready state 3. For simplicity
- * simply track keep track of sockets on connect
- * and disconnect.
+ * simply keep track of sockets on connect and
+ * disconnect.
+ *
  * @type {Set<any>}
  */
 let clients = new Set();
+/**
+ * Broadcast redux-style actions to maintain state
+ * across all connected clients.
+ *
+ * @type {{ActionBroker: {...}}}
+ */
+ActionBroker = {
 
-module.exports = {
-  /**
-   *
-   * @type {{
- *  connect: module.exports.connect,
- *  action: module.exports.action,
- *  disconnect: module.exports.disconnect,
- *  emit: module.exports.emit
- * }}
-   */
-  ActionBroker: {
-    get clientCount() {
-      return clients.size;
-    },
+  get clientCount() {
+    return clients.size;
+  },
 
-    connect: function ({peers, ws}) {
-      clients.add(ws);
-    },
+  connect: function ({peers, ws}) {
+    clients.add(ws);
+  },
 
-    handle: function () {
+  broadcast: function (action) {
+    clients.forEach((peer) => {
+      peer.send(JSON.stringify(action));
+    });
+  },
 
-    },
+  handle: function (message) {
 
-    disconnect: function ({peers, ws}) {
-      clients.delete(ws);
-    },
+    ActionBroker.broadcast(message.payload);
 
-    emit: function (action) {
-      clients.forEach((peer) => {
-        peer.send(JSON.stringify(action));
-      });
+    return {
+      type: '@@acknowledgement',
+      original: message.payload
     }
-  }
+  },
+
+  disconnect: function ({peers, ws}) {
+    clients.delete(ws);
+  },
 };
+module.exports = ActionBroker;

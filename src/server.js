@@ -5,8 +5,8 @@ const Vision = require('vision');
 const Inert = require('inert');
 const HapiReactViews = require('hapi-react-views');
 const HAPIWebSocket = require('hapi-plugin-websocket');
-const Jobs = require('./data/jobs.js');
-const {ActionBroker} = require('./actions');
+const Jobs = require('./data/jobs.js')();
+const ActionBroker = require('./actions');
 
 
 require('babel-core/register')({
