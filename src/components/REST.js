@@ -12,7 +12,7 @@
  * @returns {Promise<Response>}
  */
 export function cancelJob(id) {
-  
+
   return fetch('/jobs', {
     method: 'DELETE',
     headers: {
@@ -20,6 +20,8 @@ export function cancelJob(id) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(id)
+  }).then(function (response) {
+    return response.json();
   });
 }
 

@@ -144,7 +144,7 @@ module.exports = (minProcTime = 500, maxProcTime = 15000) => ({
         const id = request.payload;
 
         if (processIdx === id) {
-          return Boom.conflict("This job is already processing");
+          return Boom.conflict(`Job ${id} has already begun processing`);
         }
 
         // HTTP 404 if job doesn't (or no longer) exist(s).

@@ -11,6 +11,7 @@ import {CardTitle} from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 
+
 /**
  * Continually updating timer on all job cards.
  *
@@ -20,18 +21,23 @@ import {connect} from "react-redux";
  */
 export class CardTicker extends Component {
 
+
   static propTypes = {
     submissionTime: PropTypes.number.isRequired,
+    processingTime: PropTypes.number,
     ticker: PropTypes.object.isRequired,
-    statusDescription: PropTypes.string.isRequired,
+    firstInQueue: PropTypes.bool
   };
+
+  jobId = null;
 
   constructor(props) {
     super(props);
 
     this.state = {
-      elapsed: this.props.ticker.serverTime
+      elapsed: this.props.ticker.serverTime,
     };
+
   }
 
   componentDidMount() {
@@ -44,12 +50,29 @@ export class CardTicker extends Component {
     this.subscription.unsubscribe();
   }
 
-  render() {
-    return (<CardTitle
-        title={`${Math.trunc((this.state.elapsed - this.props.submissionTime) / 1000)}s`}
-        subtitle={this.props.statusDescription}>
-    </CardTitle>);
-  }
+  _FirstCardTicker = () => {
+
+    if (this.props.jobId !== this.jobId) {
+      this.jobId = this.props.jobId;
+      this.doneTime = this.state.elapsed + this.props.processingTime;
+    }
+
+    return (
+        <CardTitle
+            title={`${Math.trunc((this.doneTime - this.state.elapsed) / 1000)}s remaining`}
+            subtitle={'Processing Now'}>
+        </CardTitle>
+    );
+  };
+
+  _CardTicker = () => (
+      <CardTitle
+          title={`${Math.trunc((this.state.elapsed - this.props.submissionTime) / 1000)}s in queue`}
+          subtitle={'Waiting to start'}>
+      </CardTitle>
+  );
+
+  render = this.props.firstInQueue ? this._FirstCardTicker : this._CardTicker;
 }
 
 export const CardTickerContainer = connect(
@@ -58,4 +81,3 @@ export const CardTickerContainer = connect(
     }),
     (dispatch, props) => ({}),
 )(CardTicker);
-

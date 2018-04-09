@@ -11,6 +11,8 @@ import Dialog from 'material-ui/Dialog';
 import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import {cancelJob} from './REST';
+import {JobSnack} from "./JobSnack";
+import SnackBar from 'material-ui/Snackbar';
 
 
 /**
@@ -24,34 +26,56 @@ export class JobCancel extends Component {
   };
 
   state = {
-    open: false
+    open: false,
+    snackOpen: false,
+    snackMessage: ""
   };
 
   openDialog = () => {
     this.setState({open: true});
   };
 
-  closeDialog = () => {
-    this.setState({open: false});
-  };
+  closeDialog = (result) => {
 
+
+    if (result.statusCode >= 400) {
+
+      this.setState({
+        open: false,
+        snackOpen: true,
+        snackMessage: `Failed to cancel! ${result.message}`
+      });
+
+    } else {
+      this.setState({open: false});
+    }
+  };
 
   render() {
     return (
-        <Dialog
-            open={this.state.open && this.props.jobId}
-            title={`Are You Sure You Want to Cancel Job ${this.props.jobId}?`}
-            modal={true}
-            actions={[
-              <FlatButton
-                  label="Yes"
-                  primary={true}
-                  onClick={() => cancelJob(this.props.jobId).then(this.closeDialog)}/>,
-              <FlatButton
-                  label="No"
-                  primary={true}
-                  onClick={this.closeDialog}/>,]
-            }/>
+        <div>
+          <Dialog
+              open={this.state.open && this.props.jobId != null}
+              title={`Are You Sure You Want to Cancel Job ${this.props.jobId}?`}
+              modal={true}
+              actions={[
+                <FlatButton
+                    label="Yes"
+                    primary={true}
+                    onClick={() =>
+                        cancelJob(this.props.jobId)
+                            .then(this.closeDialog)}/>,
+                <FlatButton
+                    label="No"
+                    primary={true}
+                    onClick={this.closeDialog}/>,]
+              }/>
+
+          <SnackBar
+              open={this.state.snackOpen}
+              message={this.state.snackMessage}
+              autoHideDuration={4000}/>
+        </div>
     );
   }
 }

@@ -11,15 +11,15 @@ import {Card, CardActions, CardHeader, CardTitle} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {CardTickerContainer} from "./CardTicker";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
-import {cancelJob} from './REST';
 import {JobCancel} from "./JobCancel";
 
 const muiTheme = getMuiTheme();
 
 const style = {
-  FirstInQueue: {
-    backgroundColor: muiTheme.palette.primary1Color
+  First: {
+    backgroundColor: muiTheme.palette.primary1Color,
   }
+
 };
 
 /**
@@ -37,19 +37,21 @@ export const JobCard = ({job, idx}) => {
       <Card
           expanded={true}
           className="job-card"
-          style={idx === 0 ? style.FirstInQueue : {}}>
+          style={idx === 0 ? style.First : {}}>
         <div
             className="job-card-row">
           <CardTitle
+
+              titleStyle={style.FirstInQueue}
               title={job.name}
               subtitle={job.id.toString().padStart(4, '0')}
               expandable={true}>
           </CardTitle>
-
           <CardTickerContainer
               submissionTime={job.submissionTime}
-              startTime={(idx === 0) ? 0 : undefined}
-              statusDescription="In Queue"/>
+              processingTime={job.processingTime}
+              firstInQueue={(idx === 0)}
+              jobId={job.id}/>
         </div>
         <div
             className="job-card-row">

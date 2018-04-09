@@ -196,8 +196,9 @@ describe('Jobs Data', function () {
       assert.deepEqual(output.payload, {
         statusCode: 409,
         error: 'Conflict',
-        message: 'This job is already processing'
+        message: `Job ${jobCount} has already begun processing`
       }, "returns a descriptive JSON response");
+
     });
 
     it('should return an error if the job does not exist', () => {
